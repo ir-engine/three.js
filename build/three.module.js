@@ -16723,9 +16723,7 @@ class WebGLRenderer {
 
 			if ( object.visible === false ) return;
 
-			const visible = object.layers.test( camera.layers );
-
-			if ( visible ) {
+			{
 
 				if ( object.isGroup ) {
 
