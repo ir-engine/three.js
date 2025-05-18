@@ -11,6 +11,7 @@ import { WebXRController } from './WebXRController.js';
 import { DepthTexture } from '../../textures/DepthTexture.js';
 import { DepthFormat, DepthStencilFormat, RGBAFormat, UnsignedByteType, UnsignedIntType, UnsignedInt248Type } from '../../constants.js';
 import { WebXRDepthSensing } from './WebXRDepthSensing.js';
+import { WebGLMultiviewRenderTarget } from '../WebGLMultiviewRenderTarget.js';
 
 /**
  * This class represents an abstraction of the WebXR Device API and is
@@ -28,8 +29,10 @@ class WebXRManager extends EventDispatcher {
 	 *
 	 * @param {WebGLRenderer} renderer - The renderer.
 	 * @param {WebGL2RenderingContext} gl - The rendering context.
+	 * @param {WebGLExtensions} extensions - The WebGL extensions.
+	 * @param {boolean} useMultiview - Whether to use the WebXR multiview feature or not.
 	 */
-	constructor( renderer, gl ) {
+	constructor( renderer, gl, extensions, useMultiview ) {
 
 		super();
 
@@ -105,6 +108,7 @@ class WebXRManager extends EventDispatcher {
 		 * @default false
 		 */
 		this.isPresenting = false;
+		this.isMultiview = false;
 
 		/**
 		 * Returns a group representing the `target ray` space of the XR controller.
@@ -447,11 +451,19 @@ class WebXRManager extends EventDispatcher {
 
 					}
 
+					scope.isMultiview = useMultiview && extensions.has( 'OCULUS_multiview' );
+
 					const projectionlayerInit = {
 						colorFormat: gl.RGBA8,
 						depthFormat: glDepthFormat,
 						scaleFactor: framebufferScaleFactor
 					};
+
+					if ( scope.isMultiview ) {
+
+						projectionlayerInit.textureType = 'texture-array';
+
+					}
 
 					glBinding = new XRWebGLBinding( session, gl );
 
@@ -462,19 +474,31 @@ class WebXRManager extends EventDispatcher {
 					renderer.setPixelRatio( 1 );
 					renderer.setSize( glProjLayer.textureWidth, glProjLayer.textureHeight, false );
 
-					newRenderTarget = new WebGLRenderTarget(
-						glProjLayer.textureWidth,
-						glProjLayer.textureHeight,
-						{
-							format: RGBAFormat,
-							type: UnsignedByteType,
-							depthTexture: new DepthTexture( glProjLayer.textureWidth, glProjLayer.textureHeight, depthType, undefined, undefined, undefined, undefined, undefined, undefined, depthFormat ),
-							stencilBuffer: attributes.stencil,
-							colorSpace: renderer.outputColorSpace,
-							samples: attributes.antialias ? 4 : 0,
-							resolveDepthBuffer: ( glProjLayer.ignoreDepthValues === false ),
-							resolveStencilBuffer: ( glProjLayer.ignoreDepthValues === false )
-						} );
+					const rtOptions = {
+						format: RGBAFormat,
+						type: UnsignedByteType,
+						depthTexture: new DepthTexture( glProjLayer.textureWidth, glProjLayer.textureHeight, depthType, undefined, undefined, undefined, undefined, undefined, undefined, depthFormat ),
+						stencilBuffer: attributes.stencil,
+						encoding: renderer.outputEncoding,
+						samples: attributes.antialias ? 4 : 0
+					};
+
+					if ( scope.isMultiview ) {
+
+						const extension = extensions.get( 'OCULUS_multiview' );
+
+						this.maxNumViews = gl.getParameter( extension.MAX_VIEWS_OVR );
+
+						newRenderTarget = new WebGLMultiviewRenderTarget( glProjLayer.textureWidth, glProjLayer.textureHeight, 2, rtOptions );
+
+					} else {
+
+						newRenderTarget = new WebGLRenderTarget(
+							glProjLayer.textureWidth,
+							glProjLayer.textureHeight,
+							rtOptions );
+
+					}
 
 				}
 

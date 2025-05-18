@@ -481,6 +481,7 @@ function WebGLLights( extensions ) {
 
 		const viewMatrix = camera.matrixWorldInverse;
 
+		/**@todo fix this */
 		for ( let i = 0, l = lights.length; i < l; i ++ ) {
 
 			const light = lights[ i ];
