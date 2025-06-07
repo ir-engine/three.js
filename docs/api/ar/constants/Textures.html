@@ -281,14 +281,32 @@
 			[link:https://www.khronos.org/registry/webgl/extensions/WEBGL_compressed_texture_astc/ WEBGL_compressed_texture_astc]. <br /> <br />
 		</p>
 		 
-		<h2>تنسيق القوام المضغوط BPTC</h2>
+		<h2>تنسيقات القوام المضغوط BPTC</h2>
 		<code>
 		THREE.RGBA_BPTC_Format
+		THREE.RGB_BPTC_SIGNED_Format
+		THREE.RGB_BPTC_UNSIGNED_Format
 		</code>
 		<p>
 			للاستخدام مع خاصية [page:Texture.format format] لـ [page:CompressedTexture CompressedTexture] ،
 			هذه تتطلب دعمًا للتمديد
-			[link:https://www.khronos.org/registry/webgl/extensions/EXT_texture_compression_bptc/ EXT_texture_compression_bptc]. <br /> <br />
+			[link:https://www.khronos.org/registry/webgl/extensions/EXT_texture_compression_bptc/ EXT_texture_compression_bptc]. <br />
+			RGBA_BPTC_Format يوفر ضغط RGBA عالي الجودة، بينما RGB_BPTC_SIGNED_Format و RGB_BPTC_UNSIGNED_Format
+			يُستخدمان لقوام HDR مع قيم float موقعة وغير موقعة على التوالي.<br /> <br />
+		</p>
+
+		<h2>تنسيقات القوام المضغوط RGTC</h2>
+		<code>
+		THREE.RED_RGTC1_Format
+		THREE.SIGNED_RED_RGTC1_Format
+		THREE.RED_GREEN_RGTC2_Format
+		THREE.SIGNED_RED_GREEN_RGTC2_Format
+		</code>
+		<p>
+			للاستخدام مع خاصية [page:Texture.format format] لـ [page:CompressedTexture CompressedTexture] ،
+			هذه تتطلب دعمًا للتمديد
+			[link:https://www.khronos.org/registry/webgl/extensions/EXT_texture_compression_rgtc/ EXT_texture_compression_rgtc]. <br />
+			تنسيقات RGTC توفر ضغطًا فعالًا لقوام القناة الواحدة (أحمر) والقناة المزدوجة (أحمر-أخضر).<br /> <br />
 		</p>
 		 
 		<h2>وظائف مقارنة القوام (Texture Comparison functions)</h2>
