@@ -263,10 +263,27 @@
 		<h2>Formats de Textures Compressées BPTC</h2>
 		<code>
 		THREE.RGBA_BPTC_Format
+		THREE.RGB_BPTC_SIGNED_Format
+		THREE.RGB_BPTC_UNSIGNED_Format
 		</code>
 		<p>
 		À utiliser avec la propriété [page:Texture.format format] d'une [page:CompressedTexture CompressedTexture],
-		ceux-ci doivent supporter les extensions [link:https://www.khronos.org/registry/webgl/extensions/EXT_texture_compression_bptc/ EXT_texture_compression_bptc]. <br /><br />
+		ceux-ci doivent supporter l'extension [link:https://www.khronos.org/registry/webgl/extensions/EXT_texture_compression_bptc/ EXT_texture_compression_bptc]. <br />
+		RGBA_BPTC_Format fournit une compression RGBA de haute qualité, tandis que RGB_BPTC_SIGNED_Format et RGB_BPTC_UNSIGNED_Format
+		sont utilisés pour les textures HDR avec des valeurs float signées et non signées respectivement.<br /><br />
+		</p>
+
+		<h2>Formats de Textures Compressées RGTC</h2>
+		<code>
+		THREE.RED_RGTC1_Format
+		THREE.SIGNED_RED_RGTC1_Format
+		THREE.RED_GREEN_RGTC2_Format
+		THREE.SIGNED_RED_GREEN_RGTC2_Format
+		</code>
+		<p>
+		À utiliser avec la propriété [page:Texture.format format] d'une [page:CompressedTexture CompressedTexture],
+		ceux-ci doivent supporter l'extension [link:https://www.khronos.org/registry/webgl/extensions/EXT_texture_compression_rgtc/ EXT_texture_compression_rgtc]. <br />
+		Les formats RGTC fournissent une compression efficace pour les textures à canal unique (rouge) et double canal (rouge-vert).<br /><br />
 		</p>
 
 		<h2>Formats Internes</h2>
